@@ -1,4 +1,7 @@
 {
     "filenamePrefix": "Conversa do WhatsApp com ",
-    "timestampFormat": "DD/MM/YY, HH:mm"
+    "inputTimestamp": "DD/MM/YY, HH:mm",
+    "outputTimestamp": "YYYY-MM-DD HH:mm",
+    "dataRepository": "",
+    "mediaRepository": ""
 }
