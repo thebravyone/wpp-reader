@@ -1,0 +1,35 @@
+<!--
+@Author: Guilherme Serradilha
+@Date:   26-Apr-2016, 21:43:11
+@Last modified by:   Guilherme Serradilha
+@Last modified time: 26-Apr-2016, 22:31:07
+-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WhatsApp Reader</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="../node_modules/angular-aria/angular-aria.js"></script>
+    <script src="../node_modules/angular-animate/angular-animate.js"></script>
+    <script src="../node_modules/angular-material/angular-material.js"></script>
+    <script src="../node_modules/angular-material-icons/angular-material-icons.min.js"></script>
+    <script src="index.js"></script>
+</head>
+<body ng-app="ReaderApp" flex style="-webkit-user-select: none; user-select: none; cursor: default;">
+    <div ng-controller="ReaderCtrl">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 flex style="-webkit-app-region: drag; user-select: none; cursor: default;">WhatsApp Reader</h2>
+            </div>
+        </md-toolbar>
+        <md-content layout="row" layout-margin layout-align="start center" layout-wrap>
+            <md-button ng-disabled="hasStarted" ng-click="run()" class="md-raised md-primary">Run</md-button>
+            <p>{{fileIndex}} files created</p>
+        </md-content>
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "name": "wpp-reader",
+  "version": "1.0.0",
+  "description": "um leitor de arquivos *.txt exportados do WhatsApp, construído em Electron",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebravyone/wpp-reader.git"
+  },
+  "keywords": [
+    "WhatsApp",
+    "leitor",
+    "export",
+    "txt",
+    "histórico"
+  ],
+  "author": "thebravyone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thebravyone/wpp-reader/issues"
+  },
+  "homepage": "https://github.com/thebravyone/wpp-reader#readme",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "angular": "^1.5.5",
+    "angular-animate": "^1.5.5",
+    "angular-aria": "^1.5.5",
+    "angular-material": "^1.0.7",
+    "angular-material-icons": "^0.7.0",
+    "angular-messages": "^1.5.5",
+    "emojione": "^2.1.4",
+    "moment": "^2.13.0"
+  }
+}
