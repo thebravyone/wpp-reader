@@ -1,6 +1,6 @@
 {
   "name": "wpp-reader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "um leitor de arquivos *.txt exportados do WhatsApp, construído em Electron",
   "main": "main.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "angular-material-icons": "^0.7.0",
     "angular-messages": "^1.5.5",
     "emojione": "^2.1.4",
+    "fs-extra": "^0.29.0",
     "moment": "^2.13.0"
   }
 }

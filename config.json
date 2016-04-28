@@ -2,6 +2,6 @@
     "filenamePrefix": "Conversa do WhatsApp com ",
     "inputTimestamp": "DD/MM/YY, HH:mm",
     "outputTimestamp": "YYYY-MM-DD HH:mm",
-    "dataRepository": "",
-    "mediaRepository": ""
+    "dataRepository": "./temp",
+    "mediaRepository": "./temp/media"
 }
