@@ -2,7 +2,7 @@
 @Author: Guilherme Serradilha
 @Date:   26-Apr-2016, 21:43:11
 @Last modified by:   Guilherme Serradilha
-@Last modified time: 27-Apr-2016, 23:36:11
+@Last modified time: 03-Jul-2016, 16:01:21
 -->
 
 
@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>WhatsApp Reader</title>
+    <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
     <script src="../node_modules/angular/angular.js"></script>
@@ -18,17 +19,137 @@
     <script src="../node_modules/angular-material/angular-material.js"></script>
     <script src="../node_modules/angular-material-icons/angular-material-icons.min.js"></script>
     <script src="index.js"></script>
+    <style>
+        section {
+          pointer-events: auto;
+          visibility: visible;
+          /*padding-bottom: 1000px !important; /* avoids flickering */
+          opacity: 1;
+          transform: translateX(0);
+          transition: visibility 0s 0s linear , opacity .36s ease-out, transform .36s ease-out;
+        }
+
+        section.ng-hide {
+          pointer-events: none;
+          visibility: hidden;
+          opacity: 0;
+          transform: translateX(-20px);
+          transition: visibility 0s .12s linear , opacity .12s ease-in, transform .12s ease-in;
+        }
+
+
+        .section-wrapper {
+          position: relative;
+          margin: 0 auto;
+          overflow: hidden;
+        }
+    </style>
 </head>
-<body ng-app="ReaderApp" flex style="-webkit-user-select: none; user-select: none; cursor: default;">
+<body ng-app="ReaderApp" flex style="-webkit-user-select: none; user-select: none; cursor: default; overflow-x: hidden !important; overflow-y: hidden !important;">
     <div ng-controller="ReaderCtrl as main">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 flex style="-webkit-app-region: drag; user-select: none; cursor: default;">WhatsApp Reader</h2>
+                <md-menu>
+                  <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <ng-md-icon icon="menu" style="fill: white"></ng-md-icon>
+                  </md-button>
+                  <md-menu-content width="2">
+                    <md-menu-item>
+                      <md-button ng-click="folderDialog()">Ajuda</md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="exit()">Sair</md-button>
+                    </md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+                <h2 flex style="-webkit-app-region: drag;">WhatsApp Reader</h2>
             </div>
         </md-toolbar>
-        <md-content layout="row" layout-margin layout-align="start center" layout-wrap>
-            <md-button ng-click="readDir('./temp/source')" class="md-raised md-primary">Run</md-button>
-        </md-content>
+        <div class="section-wrapper" layout-margin>
+
+            <section layout="column" layout-align="center center" layout-wrap ng-show="appState == 'home'">
+                <img src="../img/wpp-reader_logo.png" style="margin: 24px 0;">
+                <div layout-margin class="md-body-1">
+                    <p>Baixe os históricos de mensagem e coloque-os todos em uma mesma pasta.</p>
+                    <p>Assim que estiver pronto, clique no botão abaixo e navegue até lá.</p>
+                </div>
+                <md-button ng-click="sourceFolderDialog()" class="md-raised md-primary">Selecionar Pasta</md-button>
+                <md-button ng-click="changeState('settings')" class="md-primary">Configurar</md-button>
+            </section>
+
+            <section class="md-inline-form" layout="column" layout-fill layout-padding layout-align="center start" ng-show="appState == 'settings'">
+                <form name="settings" flex>
+                    <p style="padding: 0 0 0 2px; margin-top: 10px; font-size: 30px; font-weight: 300; color: rgb(0,150,136); text-transform: uppercase;">Configurações</p>
+                    <md-input-container md-no-float class="md-block" style="margin-bottom: 0;">
+                        <label>Prefixo dos arquivos</label>
+                        <input type="text" ng-model="config.filenamePrefix">
+                    </md-input-container>
+                    <div>
+                        <md-input-container>
+                            <label>Timestamp do WhatsApp</label>
+                            <input name="inputTimestamp" required ng-model="config.inputTimestamp">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Timestamp de saída</label>
+                            <input type="text" ng-model="config.outputTimestamp">
+                        </md-input-container>
+                    </div>
+                    <span style="padding: 0 2px; font-size: 0.75em; color: rgba(0,0,0,0.54);">Diretórios</span>
+                    <md-list>
+                        <md-list-item ng-click="dataFolderDialog()">
+                            <p>Repositório das mensagens</p>
+                            <ng-md-icon icon="done" style="margin-top: 4px; fill: rgb(0,150,136)" size="16" ng-show="hasDataPath"></ng-md-icon>
+                        </md-list-item>
+                        <md-list-item ng-click="mediaFolderDialog()">
+                            <p>Repositório das mídias</p>
+                            <ng-md-icon icon="done" style="margin-top: 4px; fill: rgb(0,150,136)" size="16" ng-show="hasMediaPath"></ng-md-icon>
+                        </md-list-item>
+                    </md-list>
+                    <div layout="row">
+                        <span flex></span>
+                        <md-button ng-click="saveConfig()" class="md-primary">Voltar</md-button>
+                    </div>
+                </form>
+            </section>
+
+            <section layout="column" layout-fill layout-padding layout-align="center center" ng-show="appState == 'success'">
+                <dir layout="row" style="margin: 24px 0 0 0; padding-bottom: 0;">
+                    <img src="../img/anim_emoji/emoji_1.gif">
+                    <img src="../img/anim_emoji/emoji_3.gif">
+                    <img src="../img/anim_emoji/emoji_20.gif">
+                </dir>
+                <dir layout="row" style="margin: 0; padding-top: 0;">
+                    <img src="../img/anim_emoji/emoji_9.gif">
+                    <img src="../img/anim_emoji/emoji_23.gif">
+                    <img src="../img/anim_emoji/emoji_18.gif">
+                </dir>
+                <h2 class="md-headline" style="margin: 0; padding: 0; font-size: 30px; font-weight: 300; color: rgb(0,150,136); text-transform: uppercase;">Missão cumprida</h2>
+                <div>
+                    <p class="md-subhead" style="margin: 12px 0; width: 260px;">Seus históricos do WhatsApp foram exportados com sucesso!</p>
+                    <div layout="row" layout-align="center center" layout-wrap style="margin: 12px 0;">
+                        <md-button ng-click="openOutputFolder()" class="md-primary">Abrir Pasta</md-button>
+                        <md-button ng-click="exit()" class="md-raised md-primary">Sair</md-button>
+                    </div>
+                </div>
+            </section>
+
+            <section layout="column" layout-fill layout-padding layout-align="center center" ng-show="appState == 'ready'">
+                <h2 class="md-headline" style="margin: 10px 0 0 0; padding: 0; font-size: 30px; font-weight: 300; color: rgb(0,150,136); text-transform: uppercase;">Tudo pronto!</h2>
+                <div>
+                    <p class="md-subhead" style="margin: 12px 0 0 0;">Encontramos {{chatNames.length}} históricos de conversas.</p>
+                    <p class="md-subhead" style="margin: 0 0 12px 0;">Quais as quantidades de pessoas?</p>
+                    <md-content style="overflow-y: auto; height: 240px;">
+                        <div ng-repeat="chat in chats">
+                            <md-input-container md-no-float class="md-block" style="margin: 18px 0 0 0;">
+                                <label>{{ chat.name }}</label>
+                                <input type="number" min="0" step="1" ng-model="chat.count">
+                            </md-input-container>
+                        </div>
+                    </md-content>
+                    <md-button layout-fill ng-click="exportData()" class="md-raised md-primary" style="margin: 10px 0 0 0;">Salvar</md-button>
+                </div>
+            </section>
+        </div>
     </div>
 </body>
 </html>

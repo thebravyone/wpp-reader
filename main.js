@@ -2,7 +2,7 @@
 * @Author: Guilherme Serradilha
 * @Date:   26-Apr-2016, 21:43:05
 * @Last modified by:   Guilherme Serradilha
-* @Last modified time: 26-Apr-2016, 22:32:41
+* @Last modified time: 03-Jul-2016, 15:47:40
 */
 
 
@@ -19,9 +19,9 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
-        width: 400,
-        height: 400,
-        //resizable: false,
+        width: 410,
+        height: 500,
+        resizable: false,
         frame: false,
         autoHideMenuBar: true,
         maximizable: false,
@@ -29,6 +29,6 @@ app.on('ready', function() {
         backgroundColor: '#FFFFFF',
     });
     mainWindow.loadURL('file://' + __dirname + '/renderer/index.html');
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     mainWindow.focus();
 });
