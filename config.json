@@ -2,6 +2,53 @@
     "filenamePrefix": "Conversa do WhatsApp com ",
     "inputTimestamp": "DD/MM/YY, HH:mm",
     "outputTimestamp": "YYYY-MM-DD HH:mm",
-    "dataRepository": "",
-    "mediaRepository": ""
+    "dataRepository": "\\\\Ad\\storage\\WorkDesign\\Merial\\jobs\\005_Whatsapp_Gestao_e_Controle\\planejamento\\ADDB\\base_csv",
+    "mediaRepository": "",
+    "chats": [
+        {
+            "name": "Equinos Merial",
+            "count": 20,
+            "$$hashKey": "object:28"
+        },
+        {
+            "name": "LongRange",
+            "count": 60,
+            "$$hashKey": "object:29"
+        },
+        {
+            "name": "Merial +Leite",
+            "count": 44,
+            "$$hashKey": "object:30"
+        },
+        {
+            "name": "Onda Azul",
+            "count": 76,
+            "$$hashKey": "object:31"
+        },
+        {
+            "name": "Regional Central",
+            "count": 22,
+            "$$hashKey": "object:32"
+        },
+        {
+            "name": "Regional Centro Norte",
+            "count": 22,
+            "$$hashKey": "object:33"
+        },
+        {
+            "name": "Regional Leste",
+            "count": 23,
+            "$$hashKey": "object:34"
+        },
+        {
+            "name": "Regional Nordeste",
+            "count": 19,
+            "$$hashKey": "object:35"
+        },
+        {
+            "name": "Regional Sul",
+            "count": 23,
+            "$$hashKey": "object:36"
+        }
+    ]
 }

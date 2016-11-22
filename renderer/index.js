@@ -1,8 +1,8 @@
 /**
 * @Author: Guilherme Serradilha
 * @Date:   26-Apr-2016, 21:43:17
-* @Last modified by:   Guilherme Serradilha
-* @Last modified time: 03-Jul-2016, 15:43:54
+* @Last modified by:   Guilherme Seradilha
+* @Last modified time: 22-Nov-2016 11:59:20
 */
 
 // prevent dragover
@@ -190,9 +190,22 @@ var ReaderCtrl = function($scope) {
             }
 
             // write csv files
-            fs.writeFileSync($scope.config['dataRepository'] + '/events_'   + today + '.csv', csvEvents,   'utf8');
-            fs.writeFileSync($scope.config['dataRepository'] + '/messages_' + today + '.csv', csvMessages, 'utf8');
-            fs.writeFileSync($scope.config['dataRepository'] + '/counter_'  + today + '.csv', csvCounter,  'utf8');
+            try {
+
+                fs.writeFileSync($scope.config['dataRepository'] + '/events_'   + today + '.csv', csvEvents,   'utf8');
+                fs.writeFileSync($scope.config['dataRepository'] + '/messages_' + today + '.csv', csvMessages, 'utf8');
+                fs.writeFileSync($scope.config['dataRepository'] + '/count_'    + today + '.csv', csvCounter,  'utf8');
+
+            } catch (err) {
+                var message = 'Não foi possível salvar os arquivos.';
+
+                     if (err.code == 'ENOSPC') { message += ' Motivo: Sem espaço em disco.' }
+                else if (err.code == 'EACCES') { message += ' Motivo: Acesso negado.' }
+                else if (err.code == 'EACCES') { message += ' Motivo: Caminho não existe.' }
+
+                console.error(message, err);
+                return;
+            }
 
             $scope.outputPath = $scope.config['dataRepository'] + '/messages_'   + today + '.csv';
         }

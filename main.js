@@ -1,8 +1,8 @@
 /**
 * @Author: Guilherme Serradilha
 * @Date:   26-Apr-2016, 21:43:05
-* @Last modified by:   Guilherme Serradilha
-* @Last modified time: 03-Jul-2016, 15:47:40
+* @Last modified by:   Guilherme Seradilha
+* @Last modified time: 22-Nov-2016 11:27:41
 */
 
 
@@ -29,6 +29,6 @@ app.on('ready', function() {
         backgroundColor: '#FFFFFF',
     });
     mainWindow.loadURL('file://' + __dirname + '/renderer/index.html');
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.focus();
 });
