@@ -22,7 +22,7 @@ const fs     = require('fs-extra');
 const moment = require('moment');
 const path   = require("path");
 const reader = require('../lib/reader');
-const remote = require('remote');
+const remote = require('electron').remote
 const shell  = require('electron').shell;
 
 const {dialog} = remote;

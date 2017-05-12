@@ -19,7 +19,7 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
-        width: 410,
+        width: 420,
         height: 500,
         resizable: false,
         frame: false,
@@ -29,6 +29,6 @@ app.on('ready', function() {
         backgroundColor: '#FFFFFF',
     });
     mainWindow.loadURL('file://' + __dirname + '/renderer/index.html');
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     mainWindow.focus();
 });
