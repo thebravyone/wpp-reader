@@ -1,37 +1,35 @@
 /**
- * @Author: Guilherme Serradilha
- * @Date:   26-Apr-2016, 21:43:17
+* @Author: Guilherme Serradilha
+* @Date:   26-Apr-2016, 21:43:17
 * @Last modified by:   Guilherme Seradilha
-* @Last modified time: 25-Nov-2016 17:02:08
- */
+* @Last modified time: 22-Nov-2016 11:59:20
+*/
 
 // prevent dragover
-document.addEventListener('dragover', function(event) {
-    event.preventDefault();
-    return false;
-}, false);
+document.addEventListener('dragover',function(event){
+  event.preventDefault();
+  return false;
+},false);
 
 // prevent drop
-document.addEventListener('drop', function(event) {
-    event.preventDefault();
-    return false;
-}, false);
+document.addEventListener('drop',function(event){
+  event.preventDefault();
+  return false;
+},false);
 
 const admzip = require('adm-zip');
-const fs = require('fs-extra');
+const fs     = require('fs-extra');
 const moment = require('moment');
-const path = require("path");
+const path   = require("path");
 const reader = require('../lib/reader');
 const remote = require('remote');
-const shell = require('electron').shell;
+const shell  = require('electron').shell;
 
-const {
-    dialog
-} = remote;
+const {dialog} = remote;
 
 //** INITIALIZE ANGULAR ---------------------------------------------------------------------------------------
 
-var App = angular.module('ReaderApp', ['ngAnimate', 'ngMaterial', 'ngMdIcons']);
+var App = angular.module( 'ReaderApp', [ 'ngAnimate', 'ngMaterial', 'ngMdIcons' ] );
 
 // Theme Provider
 var Theme = function($mdThemingProvider) {
@@ -40,7 +38,7 @@ var Theme = function($mdThemingProvider) {
 }
 
 // Controllers
-var ReaderCtrl = function($scope, $mdDialog) {
+var ReaderCtrl = function($scope) {
 
     /**
      * Changes current application state
@@ -69,17 +67,14 @@ var ReaderCtrl = function($scope, $mdDialog) {
      */
     $scope.saveConfig = function() {
         fs.writeFile('config.json', JSON.stringify($scope.config, null, 4), function(error) {
-            if (error) throw error;
+          if (error) throw error;
         });
         $scope.changeState('home');
     }
 
 
     $scope.dataFolderDialog = function() {
-        dialog.showOpenDialog({
-            defaultPath: $scope.config['dataRepository'],
-            properties: ['openDirectory']
-        }, function(filenames) {
+        dialog.showOpenDialog({defaultPath: $scope.config['dataRepository'], properties: [ 'openDirectory' ]}, function(filenames) {
             if (filenames) {
                 $scope.config['dataRepository'] = filenames[0];
             }
@@ -92,10 +87,7 @@ var ReaderCtrl = function($scope, $mdDialog) {
         if ($scope.hasMediaPath) defaultPath = $scope.config['mediaRepository'];
         else defaultPath = $scope.config['dataRepository'];
 
-        dialog.showOpenDialog({
-            defaultPath: defaultPath,
-            properties: ['openDirectory']
-        }, function(filenames) {
+        dialog.showOpenDialog({defaultPath: defaultPath, properties: [ 'openDirectory' ]}, function(filenames) {
             if (filenames) {
                 $scope.config['mediaRepository'] = filenames[0];
             }
@@ -103,9 +95,7 @@ var ReaderCtrl = function($scope, $mdDialog) {
     }
 
     $scope.sourceFolderDialog = function() {
-        dialog.showOpenDialog({
-            properties: ['openDirectory']
-        }, function(filenames) {
+        dialog.showOpenDialog({properties: [ 'openDirectory' ]}, function(filenames) {
             if (filenames) {
                 $scope.dirPath = filenames[0];
                 $scope.parseDir();
@@ -126,7 +116,7 @@ var ReaderCtrl = function($scope, $mdDialog) {
                 // handle zip file
                 if (dir[i].indexOf('.zip') !== -1) {
 
-                    var zip = new admzip($scope.dirPath + '/' + dir[i]);
+                    var zip = new admzip($scope.dirPath+ '/' + dir[i]);
                     zip.getEntries().forEach(function(entry) {
                         if (entry.entryName.indexOf('.txt') !== -1)
                             output[entry.entryName.replace($scope.config['filenamePrefix'], '').replace('.txt', '')] = reader(zip.readAsText(entry, 'utf8'), $scope.config['inputTimestamp'], $scope.config['outputTimestamp']).getData();
@@ -134,23 +124,23 @@ var ReaderCtrl = function($scope, $mdDialog) {
                             zip.extractEntryTo(entry, $scope.config['mediaRepository'], false, true);
                     });
 
-                    // handle text file
+                // handle text file
                 } else if (dir[i].indexOf('.txt') !== -1) {
                     output[dir[i].replace($scope.config['filenamePrefix'], '').replace('.txt', '')] = reader(fs.readFileSync($scope.dirPath + '/' + dir[i], 'utf-8'), $scope.config['inputTimestamp'], $scope.config['outputTimestamp']).getData();
 
-                    // handle media
+                // handle media
                 } else if ($scope.hasMediaPath) {
                     fs.copySync($scope.dirPath + '/' + dir[i], $scope.config['mediaRepository'] + '/' + dir[i]);
                 }
             }
 
             $scope.parsedData = output;
-            $scope.chatNames = Object.keys(output);
-            $scope.chats = [];
+            $scope.chatNames  = Object.keys(output);
+            $scope.chats      = [];
 
             // ask for counter data
             for (var i = 0; i < $scope.chatNames.length; i++) {
-                var name = $scope.chatNames[i],
+                var name  = $scope.chatNames[i],
                     count = 0;
 
                 // check if it's in config
@@ -160,10 +150,7 @@ var ReaderCtrl = function($scope, $mdDialog) {
                             count = $scope.config.chats[j].count;
                     }
                 }
-                $scope.chats.push({
-                    name: name,
-                    count: count
-                });
+                $scope.chats.push({name: name, count: count});
             }
 
             $scope.appState = 'ready';
@@ -174,24 +161,24 @@ var ReaderCtrl = function($scope, $mdDialog) {
     $scope.exportData = function() {
 
         var today = moment().format('YYYY-MM-DD'),
-            data = $scope.parsedData;
+            data  = $scope.parsedData;
 
         if ($scope.format === 'json') {
 
             //write json file
-            fs.writeFileSync($scope.config['dataRepository'] + '/whatsapp_' + today + '.json', JSON.stringify(data, null, 4), 'utf8');
+            fs.writeFileSync($scope.config['dataRepository'] + '/whatsapp_' + today + '.json', JSON.stringify(data, null, 4),   'utf8');
 
         } else if ($scope.format === 'csv') {
 
             // build csv files
-            var csvEvents = '',
+            var csvEvents   = '',
                 csvMessages = '',
-                csvCounter = '',
-                addHeader = true;
+                csvCounter  = '',
+                addHeader   = true;
 
             for (var f in data) {
                 if (data.hasOwnProperty(f)) {
-                    csvEvents += generateCSV(data[f]['events'], f, addHeader);
+                    csvEvents   += generateCSV(data[f]['events'],   f, addHeader);
                     csvMessages += generateCSV(data[f]['messages'], f, addHeader);
                     addHeader = false;
                 }
@@ -205,21 +192,22 @@ var ReaderCtrl = function($scope, $mdDialog) {
             // write csv files
             try {
 
-                fs.writeFileSync($scope.config['dataRepository'] + '/events_' + today + '.csv', csvEvents, 'utf8');
+                fs.writeFileSync($scope.config['dataRepository'] + '/events_'   + today + '.csv', csvEvents,   'utf8');
                 fs.writeFileSync($scope.config['dataRepository'] + '/messages_' + today + '.csv', csvMessages, 'utf8');
-                fs.writeFileSync($scope.config['dataRepository'] + '/count_' + today + '.csv', csvCounter, 'utf8');
+                fs.writeFileSync($scope.config['dataRepository'] + '/count_'    + today + '.csv', csvCounter,  'utf8');
 
             } catch (err) {
-                if (err.code == 'ENOSPC') {
-                    alertDialog('Sem espaço em disco.');
-                } else if (err.code == 'EACCES') {
-                    alertDialog('Você não possui acesso à pasta de destino.');
-                } else if (err.code == 'ENOENT') {
-                    alertDialog('O caminho especificado não existe.');
-                }
+                var message = 'Não foi possível salvar os arquivos.';
+
+                     if (err.code == 'ENOSPC') { message += ' Motivo: Sem espaço em disco.' }
+                else if (err.code == 'EACCES') { message += ' Motivo: Acesso negado.' }
+                else if (err.code == 'EACCES') { message += ' Motivo: Caminho não existe.' }
+
+                console.error(message, err);
                 return;
             }
-            $scope.outputPath = $scope.config['dataRepository'] + '/messages_' + today + '.csv';
+
+            $scope.outputPath = $scope.config['dataRepository'] + '/messages_'   + today + '.csv';
         }
 
         // save counter config
@@ -229,16 +217,6 @@ var ReaderCtrl = function($scope, $mdDialog) {
         $scope.appState = 'success';
         if (!$scope.$$phase) $scope.$apply();
     }
-
-    var alertDialog = function(message) {
-        $mdDialog.show(
-            $mdDialog.alert()
-            .clickOutsideToClose(true)
-            .title('Erro ao salvar os dados')
-            .textContent(message)
-            .ok('OK')
-        );
-    };
 
     /**
      * Transforms object-data into an csv
@@ -298,7 +276,7 @@ var ReaderCtrl = function($scope, $mdDialog) {
     $scope.parsedData = {};
 
     // load settings
-    $scope.config = require('../config.json');
+    $scope.config  = require('../config.json');
     checkConfig();
 }
 
